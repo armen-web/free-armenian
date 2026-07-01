@@ -11,16 +11,13 @@ workflows:
         BUNDLE_ID: "org.freearmenian.app"
     cache:
       cache_paths:
-        - $HOME/.npm
-        - ios/Pods
+        - $CM_BUILD_DIR/node_modules
+        - ~/.npm
+        - ios/App/Pods
     scripts:
       - name: Install npm dependencies
         script: |
-          npm config set registry https://registry.npmjs.org/
-          npm cache clean --force
-          rm -rf node_modules
-          rm -f package-lock.json
-          npm install --no-package-lock --registry=https://registry.npmjs.org/ --fetch-timeout=600000
+          npm install --package-lock=false --no-audit --no-fund
       - name: Generate iOS platform if missing
         script: |
           if [ ! -d "ios" ]; then
@@ -31,54 +28,26 @@ workflows:
           npx cap sync ios
       - name: Verify generated iOS project
         script: |
-          ls -la ios/App
-          xcodebuild -list -workspace ios/App/App.xcworkspace
+          echo "Repository root: $CM_BUILD_DIR"
+          echo "iOS folder:"
+          ls -la ios || true
+          echo "iOS App folder:"
+          ls -la ios/App || true
+          if [ ! -d "ios/App/App.xcodeproj" ]; then
+            echo "ERROR: ios/App/App.xcodeproj does not exist"
+            exit 1
+          fi
+          xcodebuild -list -project ios/App/App.xcodeproj
       - name: Build iOS app without signing
         script: |
           xcodebuild \
-            -workspace ios/App/App.xcworkspace \
+            -project ios/App/App.xcodeproj \
             -scheme App \
             -configuration Debug \
-            -sdk iphonesimulator \
-            -derivedDataPath build/DerivedData \
+            -destination 'generic/platform=iOS' \
             CODE_SIGNING_ALLOWED=NO \
             build
     artifacts:
-      - build/DerivedData/Build/Products/**/*.app
-      - ios/App/App.xcodeproj
-      - ios/App/App.xcworkspace
-      - $CM_BUILD_DIR/**/*.log
-
-  ios_capacitor_release_signed:
-    name: Free Armenian iOS - Signed Release Template
-    max_build_duration: 60
-    instance_type: mac_mini_m2
-    environment:
-      xcode: latest
-      node: latest
-      cocoapods: default
-      vars:
-        BUNDLE_ID: "org.freearmenian.app"
-        XCODE_WORKSPACE: "ios/App/App.xcworkspace"
-        XCODE_SCHEME: "App"
-    scripts:
-      - name: Install npm dependencies
-        script: |
-          npm config set registry https://registry.npmjs.org/
-          npm cache clean --force
-          rm -rf node_modules
-          rm -f package-lock.json
-          npm install --no-package-lock --registry=https://registry.npmjs.org/ --fetch-timeout=600000
-      - name: Generate iOS platform if missing
-        script: |
-          if [ ! -d "ios" ]; then
-            npx cap add ios
-          fi
-      - name: Sync Capacitor iOS project
-        script: npx cap sync ios
-      - name: Build archive placeholder
-        script: |
-          echo "Before running signed release, configure Apple Developer signing in Codemagic Code signing settings."
-          echo "Bundle ID: $BUNDLE_ID"
-    artifacts:
       - build/ios/ipa/*.ipa
+      - /tmp/xcodebuild_logs/*.log
+      - $HOME/Library/Developer/Xcode/DerivedData/**/Build/**/*.app
