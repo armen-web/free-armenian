@@ -1,3 +1,5 @@
+integrations:
+  app_store_connect: Codemagic
 workflows:
   ios_capacitor_release:
     name: Free Armenian iOS - Release TestFlight
