@@ -12,12 +12,15 @@ workflows:
     cache:
       cache_paths:
         - $HOME/.npm
-        - $CM_BUILD_DIR/node_modules
         - ios/Pods
     scripts:
       - name: Install npm dependencies
         script: |
-          npm install
+          npm config set registry https://registry.npmjs.org/
+          npm cache clean --force
+          rm -rf node_modules
+          rm -f package-lock.json
+          npm install --no-package-lock --registry=https://registry.npmjs.org/ --fetch-timeout=600000
       - name: Generate iOS platform if missing
         script: |
           if [ ! -d "ios" ]; then
@@ -60,7 +63,12 @@ workflows:
         XCODE_SCHEME: "App"
     scripts:
       - name: Install npm dependencies
-        script: npm install
+        script: |
+          npm config set registry https://registry.npmjs.org/
+          npm cache clean --force
+          rm -rf node_modules
+          rm -f package-lock.json
+          npm install --no-package-lock --registry=https://registry.npmjs.org/ --fetch-timeout=600000
       - name: Generate iOS platform if missing
         script: |
           if [ ! -d "ios" ]; then

@@ -1,6 +1,6 @@
 {
   "name": "free-armenian",
-  "version": "16.40.0",
+  "version": "16.40.1",
   "private": true,
   "description": "Free Armenian mobile app based on approved V16.40 HTML build.",
   "scripts": {
@@ -9,10 +9,10 @@
     "add:ios": "npx cap add ios"
   },
   "dependencies": {
-    "@capacitor/core": "latest",
-    "@capacitor/ios": "latest"
+    "@capacitor/core": "8.4.1",
+    "@capacitor/ios": "8.4.1"
   },
   "devDependencies": {
-    "@capacitor/cli": "latest"
+    "@capacitor/cli": "8.4.1"
   }
 }
