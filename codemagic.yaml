@@ -1,0 +1,76 @@
+workflows:
+  ios_capacitor_unsigned_check:
+    name: Free Armenian iOS - Build Check
+    max_build_duration: 60
+    instance_type: mac_mini_m2
+    environment:
+      xcode: latest
+      node: latest
+      cocoapods: default
+      vars:
+        BUNDLE_ID: "org.freearmenian.app"
+    cache:
+      cache_paths:
+        - $HOME/.npm
+        - $CM_BUILD_DIR/node_modules
+        - ios/Pods
+    scripts:
+      - name: Install npm dependencies
+        script: |
+          npm install
+      - name: Generate iOS platform if missing
+        script: |
+          if [ ! -d "ios" ]; then
+            npx cap add ios
+          fi
+      - name: Sync Capacitor iOS project
+        script: |
+          npx cap sync ios
+      - name: Verify generated iOS project
+        script: |
+          ls -la ios/App
+          xcodebuild -list -workspace ios/App/App.xcworkspace
+      - name: Build iOS app without signing
+        script: |
+          xcodebuild \
+            -workspace ios/App/App.xcworkspace \
+            -scheme App \
+            -configuration Debug \
+            -sdk iphonesimulator \
+            -derivedDataPath build/DerivedData \
+            CODE_SIGNING_ALLOWED=NO \
+            build
+    artifacts:
+      - build/DerivedData/Build/Products/**/*.app
+      - ios/App/App.xcodeproj
+      - ios/App/App.xcworkspace
+      - $CM_BUILD_DIR/**/*.log
+
+  ios_capacitor_release_signed:
+    name: Free Armenian iOS - Signed Release Template
+    max_build_duration: 60
+    instance_type: mac_mini_m2
+    environment:
+      xcode: latest
+      node: latest
+      cocoapods: default
+      vars:
+        BUNDLE_ID: "org.freearmenian.app"
+        XCODE_WORKSPACE: "ios/App/App.xcworkspace"
+        XCODE_SCHEME: "App"
+    scripts:
+      - name: Install npm dependencies
+        script: npm install
+      - name: Generate iOS platform if missing
+        script: |
+          if [ ! -d "ios" ]; then
+            npx cap add ios
+          fi
+      - name: Sync Capacitor iOS project
+        script: npx cap sync ios
+      - name: Build archive placeholder
+        script: |
+          echo "Before running signed release, configure Apple Developer signing in Codemagic Code signing settings."
+          echo "Bundle ID: $BUNDLE_ID"
+    artifacts:
+      - build/ios/ipa/*.ipa

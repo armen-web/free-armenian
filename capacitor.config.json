@@ -1,0 +1,13 @@
+{
+  "appId": "org.freearmenian.app",
+  "appName": "Free Armenian",
+  "webDir": "www",
+  "bundledWebRuntime": false,
+  "ios": {
+    "contentInset": "automatic",
+    "limitsNavigationsToAppBoundDomains": false
+  },
+  "server": {
+    "androidScheme": "https"
+  }
+}
