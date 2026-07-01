@@ -1,53 +1,59 @@
 workflows:
-  ios_capacitor_unsigned_check:
-    name: Free Armenian iOS - Build Check
+  ios_capacitor_release:
+    name: Free Armenian iOS - Release TestFlight
     max_build_duration: 60
     instance_type: mac_mini_m2
+
     environment:
       xcode: latest
       node: latest
       cocoapods: default
       vars:
         BUNDLE_ID: "org.freearmenian.app"
+        XCODE_PROJECT: "ios/App/App.xcodeproj"
+        XCODE_SCHEME: "App"
+      ios_signing:
+        distribution_type: app_store
+        bundle_identifier: "org.freearmenian.app"
+
     cache:
       cache_paths:
         - $CM_BUILD_DIR/node_modules
         - ~/.npm
         - ios/App/Pods
+
     scripts:
       - name: Install npm dependencies
         script: |
           npm install --package-lock=false --no-audit --no-fund
+
       - name: Generate iOS platform if missing
         script: |
           if [ ! -d "ios" ]; then
             npx cap add ios
           fi
+
       - name: Sync Capacitor iOS project
         script: |
           npx cap sync ios
-      - name: Verify generated iOS project
+
+      - name: Apply Codemagic signing profiles
         script: |
-          echo "Repository root: $CM_BUILD_DIR"
-          echo "iOS folder:"
-          ls -la ios || true
-          echo "iOS App folder:"
-          ls -la ios/App || true
-          if [ ! -d "ios/App/App.xcodeproj" ]; then
-            echo "ERROR: ios/App/App.xcodeproj does not exist"
-            exit 1
-          fi
-          xcodebuild -list -project ios/App/App.xcodeproj
-      - name: Build iOS app without signing
+          xcode-project use-profiles
+
+      - name: Build signed IPA
         script: |
-          xcodebuild \
-            -project ios/App/App.xcodeproj \
-            -scheme App \
-            -configuration Debug \
-            -destination 'generic/platform=iOS' \
-            CODE_SIGNING_ALLOWED=NO \
-            build
+          xcode-project build-ipa \
+            --project "$XCODE_PROJECT" \
+            --scheme "$XCODE_SCHEME"
+
     artifacts:
       - build/ios/ipa/*.ipa
       - /tmp/xcodebuild_logs/*.log
       - $HOME/Library/Developer/Xcode/DerivedData/**/Build/**/*.app
+      - $HOME/Library/Developer/Xcode/DerivedData/**/Build/**/*.dSYM
+
+    publishing:
+      app_store_connect:
+        auth: integration
+        submit_to_testflight: true
