@@ -38,8 +38,8 @@
     }
 
     body {
-    padding-top: calc(28px + env(safe-area-inset-top));
-    padding-bottom: calc(96px + env(safe-area-inset-bottom));
+    padding-top: calc(16px + env(safe-area-inset-top));
+    padding-bottom: calc(86px + env(safe-area-inset-bottom));
 }
     
 
@@ -3412,7 +3412,8 @@
         <button class="fa15-icon" onclick="openDonateTargets()"><span class="ico">💙</span><span>Դոնատ</span></button>
         <button class="fa15-icon" onclick="openPage('Կրոն','religion')"><span
             class="ico">⛪</span><span>Կրոն</span></button>
-        <button class="fa15-icon" onclick="openPage('Օգտակար ծառայություններ','services')"><span class="ico faCompassIcon" aria-hidden="true"><svg viewBox="0 0 64 64" width="36" height="36" role="img" focusable="false"><circle cx="32" cy="32" r="25" fill="none" stroke="currentColor" stroke-width="4"/><path d="M39 12L31 35L25 52L33 29Z" fill="currentColor"/><circle cx="32" cy="32" r="4" fill="#fff"/></svg></span><span>Օգտակար ծառայություններ</span></button>
+        <button class="fa15-icon" onclick="openPage('Օգտակար ծառայություններ','services')"><span
+            class="ico">🧭</span><span>Օգտակար ծառայություններ</span></button>
         <button class="fa15-icon" onclick="openPage('Սպուտնիկային կապ','satellite')"><span
             class="ico">🛰️</span><span>Սպուտնիկային կապ</span></button>
         <button class="fa15-icon" onclick="openPage('Արհեստական բանականության զարգացում','ai')"><span
@@ -3445,7 +3446,7 @@
       </div>
       <div class="grid">
         <div class="card" id="services">
-          <div class="cardIcon faCompassCardIcon" aria-hidden="true"><svg viewBox="0 0 64 64" width="42" height="42" role="img" focusable="false"><circle cx="32" cy="32" r="25" fill="none" stroke="currentColor" stroke-width="4"/><path d="M39 12L31 35L25 52L33 29Z" fill="currentColor"/><circle cx="32" cy="32" r="4" fill="#fff"/></svg></div>
+          <div class="cardIcon">🧭</div>
           <h3>Օգտակար ծառայություններ</h3>
           <p>Բանկային ծառայություններ, ապահովագրություն, աշխատանք, կրթություն, AI զարգացում և օգնություն
             հայրենադարձներին։</p><button class="openBtn" onclick="toggleCard(event,this)">Ուղղություններ
@@ -10323,133 +10324,231 @@
   </script>
 
 
-  <!-- V16.52 FINAL LOCKED FIXES ONLY: logo + stable compass + safe area -->
-  <style id="fa-v16-52-final-locked-fixes">
-    :root{
-      --fa-safe-top: env(safe-area-inset-top, 0px);
-      --fa-safe-bottom: env(safe-area-inset-bottom, 0px);
+  <!-- V16.52 FINAL USER FIX: bigger header logo + stable compass/services icon only -->
+  <style id="fa-v16-52-logo-compass-final-css">
+    /* Bigger logo in the top cover/header of the interface */
+    .coverLogo {
+      width: 118px !important;
+      height: 118px !important;
+      left: 14px !important;
+      bottom: 10px !important;
+      padding: 5px !important;
+      transform: none !important;
+      animation: none !important;
+      transition: none !important;
     }
 
-    html, body{
-      margin:0 !important;
-      background:#f3f7fc !important;
-      overflow-x:hidden !important;
-      padding-top:0 !important;
-      padding-bottom:calc(92px + var(--fa-safe-bottom)) !important;
+    .coverTitle {
+      left: 145px !important;
+      bottom: 20px !important;
     }
 
-    #faFinalHeader{
-      padding-top:var(--fa-safe-top) !important;
-      margin-top:0 !important;
-      top:0 !important;
-      background:#fff !important;
-      border-top:0 !important;
+    @media (max-width: 390px) {
+      .coverLogo {
+        width: 112px !important;
+        height: 112px !important;
+        left: 12px !important;
+      }
+      .coverTitle {
+        left: 136px !important;
+      }
     }
 
-    #faFinalHeader .faFinalBrand{
-      display:flex !important;
-      align-items:center !important;
-      gap:14px !important;
-      padding:12px 16px 14px !important;
-      background:#fff !important;
-      border-bottom:1px solid var(--line) !important;
+    /* Compass/services icon must stay visually stable and not jump/blink */
+    body:not(.inside-page) .fa15-icon[data-v1640="nav"],
+    body:not(.inside-page) .fa15-icon.fa-v1652-stable-compass,
+    body:not(.inside-page) .fa15-icon[onclick*="services"] {
+      transform: none !important;
+      animation: none !important;
+      transition: none !important;
+      will-change: auto !important;
+      contain: layout paint !important;
     }
 
-    #faFinalHeader .faFinalLogo{
-      width:96px !important;
-      height:96px !important;
-      min-width:96px !important;
-      object-fit:contain !important;
-      border-radius:18px !important;
-      transform:none !important;
-      animation:none !important;
-      transition:none !important;
-    }
-
-    #faFinalHeader .faFinalTitle{
-      font-size:27px !important;
-      line-height:.96 !important;
-      margin:0 !important;
-      padding:0 !important;
-    }
-
-    #faFinalHeader .faFinalSubtitle{
-      font-size:14px !important;
-      line-height:1.15 !important;
-      margin-top:6px !important;
-    }
-
-    #faFinalBottom.bottom{
-      bottom:var(--fa-safe-bottom) !important;
-      height:76px !important;
-    }
-
-    body:not(.inside-page) .fa15-desktop{
-      padding-bottom:calc(92px + var(--fa-safe-bottom)) !important;
-      margin-bottom:0 !important;
-    }
-
-    #pageContent{
-      padding-bottom:calc(112px + var(--fa-safe-bottom)) !important;
-    }
-
-    body:not(.inside-page) .fa15-icon-grid{
-      visibility:visible !important;
-      margin-bottom:0 !important;
-      padding-bottom:0 !important;
-      contain:layout paint !important;
-    }
-
-    body:not(.inside-page) .fa15-icon,
-    body:not(.inside-page) .fa15-icon .ico,
-    .faCompassIcon,
-    .faCompassIcon svg,
-    .faCompassCardIcon,
-    .faCompassCardIcon svg{
-      animation:none !important;
-      transition:none !important;
-      transform:none !important;
-      will-change:auto !important;
-      backface-visibility:hidden !important;
-    }
-
-    .faCompassIcon{
-      display:grid !important;
-      place-items:center !important;
-      width:52px !important;
-      height:52px !important;
-      min-width:52px !important;
-      min-height:52px !important;
-      line-height:1 !important;
-      font-size:0 !important;
-    }
-
-    .faCompassIcon svg,
-    .faCompassCardIcon svg{
-      display:block !important;
-      flex:none !important;
+    body:not(.inside-page) .fa15-icon[data-v1640="nav"] .ico,
+    body:not(.inside-page) .fa15-icon.fa-v1652-stable-compass .ico,
+    body:not(.inside-page) .fa15-icon[onclick*="services"] .ico {
+      width: 48px !important;
+      height: 48px !important;
+      min-width: 48px !important;
+      min-height: 48px !important;
+      display: inline-flex !important;
+      align-items: center !important;
+      justify-content: center !important;
+      line-height: 1 !important;
+      font-size: 25px !important;
+      transform: none !important;
+      animation: none !important;
+      transition: none !important;
+      backface-visibility: hidden !important;
     }
   </style>
-  <script id="fa-v16-52-final-locked-fixes-js">
-    (function(){
-      function apply(){
-        try{
-          document.documentElement.classList.add('fa-icons-ready');
-          var grid=document.querySelector('.fa15-icon-grid');
-          if(grid){grid.style.visibility='visible';}
-          document.querySelectorAll('.faCompassIcon,.faCompassIcon svg,.faCompassCardIcon,.faCompassCardIcon svg').forEach(function(el){
-            el.style.animation='none'; el.style.transition='none'; el.style.transform='none';
-          });
-        }catch(e){}
+  <script id="fa-v16-52-logo-compass-final-js">
+    (function () {
+      function q(s, r) { return (r || document).querySelector(s); }
+      function qa(s, r) { return Array.from((r || document).querySelectorAll(s)); }
+      function grid() { return q('.fa15-icon-grid'); }
+      function label(el) { var sp = el && el.querySelector('span:last-child'); return (sp ? sp.textContent : (el && el.textContent) || '').trim(); }
+      function setLabel(el, txt) { var sp = el && el.querySelector('span:last-child'); if (sp && sp.textContent !== txt) sp.textContent = txt; }
+      function setIcon(el, txt) { var sp = el && el.querySelector('.ico'); if (sp && sp.textContent !== txt) sp.textContent = txt; }
+      function isServices(el) {
+        if (!el) return false;
+        var oc = el.getAttribute('onclick') || '';
+        var t = label(el);
+        return oc.indexOf('services') > -1 || t.indexOf('Օգտակար') > -1 || t.indexOf('ծառայ') > -1 || t.indexOf('Օրիենտ') > -1;
       }
-      apply();
-      if(document.readyState==='loading') document.addEventListener('DOMContentLoaded', apply, {once:true});
-      requestAnimationFrame(apply);
-      setTimeout(apply,50);
-      setTimeout(apply,300);
+      function servicesButton() {
+        var g = grid(); if (!g) return null;
+        return qa('.fa15-icon', g).find(isServices) || null;
+      }
+      function stabilize() {
+        var g = grid();
+        var el = servicesButton();
+        if (!g || !el) return;
+        el.dataset.v1640 = 'nav';
+        el.classList.add('fa-v1652-stable-compass');
+        setIcon(el, '🧭');
+        setLabel(el, 'Օգտակար\nծառայություններ');
+      }
+      function lockCompassMovement() {
+        var g = grid(); if (!g || g.dataset.faV1652CompassLocked === '1') return;
+        g.dataset.faV1652CompassLocked = '1';
+        var realInsert = g.insertBefore;
+        var realAppend = g.appendChild;
+        g.insertBefore = function (child, ref) {
+          if (child && child.classList && child.classList.contains('fa-v1652-stable-compass')) { stabilize(); return child; }
+          return realInsert.call(this, child, ref);
+        };
+        g.appendChild = function (child) {
+          if (child && child.classList && child.classList.contains('fa-v1652-stable-compass')) { stabilize(); return child; }
+          return realAppend.call(this, child);
+        };
+      }
+      function run() { stabilize(); lockCompassMovement(); }
+      run();
+      if (document.readyState === 'loading') document.addEventListener('DOMContentLoaded', run, { once: true });
+      [0, 50, 150, 350, 700, 1200, 2000, 3200, 5000].forEach(function (ms) { setTimeout(run, ms); });
+      try {
+        var mo = new MutationObserver(function () { run(); });
+        if (document.documentElement) mo.observe(document.documentElement, { childList: true, subtree: true, characterData: true });
+        setTimeout(function () { try { mo.disconnect(); } catch (e) {} }, 7000);
+      } catch (e) {}
     })();
   </script>
 
+
+<style id="fa-v16-52-fixed-header-footer-scroll-patch">
+  /* Home screen: fixed compact header and fixed bottom navigation.
+     Only the central desktop icon area scrolls. */
+  body:not(.inside-page) {
+    height: 100vh !important;
+    height: 100dvh !important;
+    min-height: 100vh !important;
+    min-height: 100dvh !important;
+    overflow: hidden !important;
+    padding-top: env(safe-area-inset-top) !important;
+    padding-bottom: 0 !important;
+    display: flex !important;
+    flex-direction: column !important;
+  }
+
+  body:not(.inside-page) #faFinalHeader {
+    position: relative !important;
+    top: auto !important;
+    left: auto !important;
+    right: auto !important;
+    flex: 0 0 auto !important;
+    width: 100% !important;
+    max-width: 430px !important;
+    z-index: 1000 !important;
+    background: #fff !important;
+    border-bottom: 1px solid var(--line) !important;
+    box-shadow: 0 5px 16px rgba(6, 27, 56, .07) !important;
+  }
+
+  body:not(.inside-page) #faFinalHeader .faFinalBrand {
+    min-height: 68px !important;
+    padding: 6px 14px 7px !important;
+    gap: 10px !important;
+    align-items: center !important;
+  }
+
+  body:not(.inside-page) #faFinalHeader .faFinalLogo {
+    width: 56px !important;
+    height: 56px !important;
+    min-width: 56px !important;
+    border-radius: 12px !important;
+  }
+
+  body:not(.inside-page) #faFinalHeader .faFinalTitle {
+    font-size: 23px !important;
+    line-height: .94 !important;
+    letter-spacing: -.35px !important;
+  }
+
+  body:not(.inside-page) #faFinalHeader .faFinalSubtitle {
+    font-size: 12.5px !important;
+    line-height: 1.12 !important;
+    margin-top: 4px !important;
+  }
+
+  body:not(.inside-page) > .app {
+    flex: 1 1 auto !important;
+    width: 100% !important;
+    max-width: 430px !important;
+    min-height: 0 !important;
+    height: auto !important;
+    overflow: hidden !important;
+    margin: 0 auto !important;
+  }
+
+  body:not(.inside-page) .fa15-desktop {
+    height: 100% !important;
+    min-height: 0 !important;
+    overflow-y: auto !important;
+    overflow-x: hidden !important;
+    -webkit-overflow-scrolling: touch !important;
+    overscroll-behavior-y: contain !important;
+    padding-top: 10px !important;
+    padding-bottom: calc(94px + env(safe-area-inset-bottom)) !important;
+    margin: 0 !important;
+  }
+
+  body:not(.inside-page) .fa15-icon-grid {
+    padding-bottom: 10px !important;
+    margin-bottom: 0 !important;
+  }
+
+  body:not(.inside-page) #faFinalBottom.bottom {
+    position: fixed !important;
+    left: 50% !important;
+    right: auto !important;
+    bottom: 0 !important;
+    transform: translateX(-50%) !important;
+    width: 100% !important;
+    max-width: 430px !important;
+    z-index: 1100 !important;
+  }
+
+  @media (max-width: 360px) {
+    body:not(.inside-page) #faFinalHeader .faFinalBrand {
+      min-height: 62px !important;
+      padding: 5px 10px 6px !important;
+      gap: 8px !important;
+    }
+    body:not(.inside-page) #faFinalHeader .faFinalLogo {
+      width: 50px !important;
+      height: 50px !important;
+      min-width: 50px !important;
+    }
+    body:not(.inside-page) #faFinalHeader .faFinalTitle {
+      font-size: 21px !important;
+    }
+    body:not(.inside-page) #faFinalHeader .faFinalSubtitle {
+      font-size: 11.5px !important;
+    }
+  }
+</style>
 </body>
 
 </html>
